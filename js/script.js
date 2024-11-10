@@ -156,12 +156,14 @@ window.addEventListener(('DOMContentLoaded'), () => {
     // Используем класы
 
     class MenuCards {
-        constructor(srcImg, alt, title, dscr, price) {
+        constructor(srcImg, alt, title, dscr, price, parent, ...classList) {
             this.srcImg = srcImg;
             this.alt = alt;
             this.title = title;
             this.dscr = dscr;
             this.price = price;
+            this.classList = classList;
+            this.parent = document.querySelector(parent);
             this.transfer = 27;
             this.changeToUAH();
         }
@@ -171,8 +173,16 @@ window.addEventListener(('DOMContentLoaded'), () => {
         }
 
         rander() {
-            const parent = document.querySelector('.menu__field');
-            parent.firstElementChild.insertAdjacentHTML('beforeend', `<div class="menu__item positionCards">
+            const element = document.createElement('div');
+
+            if (this.classList.length === 0) {
+                this.classList = 'menu__item';
+                element.classList.add(this.classList)
+            } else {
+                this.classList.forEach(cl => element.classList.add(cl))
+            }
+
+            element.innerHTML = `
                     <img src="${this.srcImg}" alt="${this.alt}">
                     <h3 class="menu__item-subtitle">${this.title}</h3>
                     <div class="menu__item-descr">${this.dscr}</div>
@@ -180,14 +190,38 @@ window.addEventListener(('DOMContentLoaded'), () => {
                     <div class="menu__item-price">
                         <div class="menu__item-cost">Цена:</div>
                         <div class="menu__item-total"><span>${this.price}</span> грн/день</div>
-                    </div>
-                </div>`);
+                    </div>`;
+
+            this.parent.append(element)
 
         }
     }
 
-    const cardk = new MenuCards('img/tabs/vegy.jpg', 'vegy', 'Меню "Сбалансированное"', 'Меню "Сбалансированное" - это соответствие вашего рациона всем научным рекомендациям. Мы тщательно просчитываем вашу потребность в к/б/ж/у и создаем лучшие блюда для вас.', 13);
+    new MenuCards('img/tabs/vegy.jpg',
+        'vegy',
+        'Меню "Фитнес"',
+        'Меню "Фитнес" - это новый подход к приготовлению блюд: больше свежих овощей и фруктов.Продукт активных и здоровых людей.Это абсолютно новый продукт с оптимальной ценой и высоким качеством!',
+        8,
+        '.menu__field .container',
+        'menu__item'
+    ).rander();
 
-    cardk.rander();
+    new MenuCards('img/tabs/elite.jpg',
+        'elite',
+        'Меню “Премиум”',
+        'В меню “Премиум” мы используем не только красивый дизайн упаковки, но и качественное исполнение блюд.Красная рыба, морепродукты, фрукты - ресторанное меню без похода в ресторан!',
+        20,
+        '.menu__field .container',
+        'menu__item'
+    ).rander();
+
+    new MenuCards('img/tabs/post.jpg',
+        'post',
+        'Меню "Постное"',
+        'Меню “Постное” - это тщательный подбор ингредиентов: полное отсутствие продуктов животного происхождения, молоко из миндаля, овса, кокоса или гречки, правильное количество белков за счет тофу и импортных вегетарианских стейков.',
+        15,
+        '.menu__field .container',
+        'menu__item'
+    ).rander();
 
 });
