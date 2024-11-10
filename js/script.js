@@ -141,7 +141,7 @@ window.addEventListener(('DOMContentLoaded'), () => {
         }
     })
 
-    const openModalThroughTime = setTimeout(openModal, 15000);
+    // const openModalThroughTime = setTimeout(openModal, 15000);
 
     function showModalByScroll() {
         if (window.pageYOffset + document.documentElement.clientHeight >= document.documentElement.scrollHeight - 1) {
@@ -152,4 +152,42 @@ window.addEventListener(('DOMContentLoaded'), () => {
     }
 
     window.addEventListener('scroll', showModalByScroll)
+
+    // Используем класы
+
+    class MenuCards {
+        constructor(srcImg, alt, title, dscr, price) {
+            this.srcImg = srcImg;
+            this.alt = alt;
+            this.title = title;
+            this.dscr = dscr;
+            this.price = price;
+            this.transfer = 27;
+            this.changeToUAH();
+        }
+
+        changeToUAH() {
+            this.price = this.price * this.transfer;
+        }
+
+        rander() {
+            const parent = document.querySelector('.menu__field');
+            parent.firstElementChild.insertAdjacentHTML('beforeend', `<div class="menu__item positionCards">
+                    <img src="${this.srcImg}" alt="${this.alt}">
+                    <h3 class="menu__item-subtitle">${this.title}</h3>
+                    <div class="menu__item-descr">${this.dscr}</div>
+                    <div class="menu__item-divider"></div>
+                    <div class="menu__item-price">
+                        <div class="menu__item-cost">Цена:</div>
+                        <div class="menu__item-total"><span>${this.price}</span> грн/день</div>
+                    </div>
+                </div>`);
+
+        }
+    }
+
+    const cardk = new MenuCards('img/tabs/vegy.jpg', 'vegy', 'Меню "Сбалансированное"', 'Меню "Сбалансированное" - это соответствие вашего рациона всем научным рекомендациям. Мы тщательно просчитываем вашу потребность в к/б/ж/у и создаем лучшие блюда для вас.', 13);
+
+    cardk.rander();
+
 });
