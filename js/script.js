@@ -224,6 +224,7 @@ window.addEventListener(('DOMContentLoaded'), () => {
     //Forms
 
     const forms = document.querySelectorAll('form');
+    console.log(forms);
 
     const massage = {
         loading: 'img/spiner/spinner.svg',
@@ -247,10 +248,6 @@ window.addEventListener(('DOMContentLoaded'), () => {
             `;
             form.insertAdjacentElement('afterend', statusMassege);
 
-
-            const request = new XMLHttpRequest();
-            request.open('POST', 'server.php');
-            request.setRequestHeader('Content-type', 'application/json');
             const formData = new FormData(form);
 
             const obj = {};
@@ -258,20 +255,27 @@ window.addEventListener(('DOMContentLoaded'), () => {
                 obj[key] = value;
             });
 
-            const json = JSON.stringify(obj);
-
-            request.send(json);
-
-            request.addEventListener('load', () => {
-                if (request.status === 200) {
-                    console.log(request.response);
-                    showThanksModal(massage.success)
-                    form.reset();
-                    statusMassege.remove();
-                } else {
-                    showThanksModal(massage.failure)
-                }
+            fetch('server.php', {
+                method: 'POST',
+                headers: {
+                    'Content-type': 'application/json'
+                },
+                body: JSON.stringify(obj)
             })
+                .then(data => data.text())
+                .then(data => {
+                    console.log(data);
+                    showThanksModal(massage.success);
+                    statusMassege.remove();
+                })
+                .catch(() => {
+                    showThanksModal(massage.failure)
+                })
+                .finally(() => {
+                    form.reset();
+
+                })
+
         })
     }
 
@@ -299,5 +303,7 @@ window.addEventListener(('DOMContentLoaded'), () => {
         }, 4000);
 
     }
+
+
 
 });
