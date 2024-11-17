@@ -205,6 +205,7 @@ window.addEventListener(('DOMContentLoaded'), () => {
 
     const forms = document.querySelectorAll('form');
 
+
     const massage = {
         loading: 'img/spiner/spinner.svg',
         success: 'Спасибо! Скоро мы с вами свяжемся.',
@@ -269,6 +270,52 @@ window.addEventListener(('DOMContentLoaded'), () => {
             clouseModal();
 
         }, 4000);
+    };
 
+    // Создание слайдера
+
+    const imgSlider = document.querySelectorAll('.offer__slide'),
+        idSlider = document.querySelector('#current'),
+        rigthArrow = document.querySelector('.offer__slider-next'),
+        leftArrow = document.querySelector('.offer__slider-prev');
+
+    // Счётчик слайда
+
+    let t = 0;
+
+    function current() {
+        imgSlider.forEach((item, i) => {
+            if (!item.classList.contains('hide')) {
+                t = i
+            }
+        });
+
+        idSlider.innerHTML = ''
+        idSlider.innerHTML = `0${t + 1}`
     }
+
+    current()
+
+    // Смена слайдов
+
+    rigthArrow.addEventListener('click', () => {
+        imgSlider[t].classList.add('hide')
+        if (t == (imgSlider.length - 1)) {
+            imgSlider[0].classList.remove('hide')
+        } else {
+            imgSlider[t + 1].classList.remove('hide')
+        }
+        current()
+    })
+
+    leftArrow.addEventListener('click', () => {
+        imgSlider[t].classList.add('hide')
+        if (t == 0) {
+            imgSlider[imgSlider.length - 1].classList.remove('hide')
+        } else {
+            imgSlider[t - 1].classList.remove('hide')
+        }
+        current()
+    })
+
 });
