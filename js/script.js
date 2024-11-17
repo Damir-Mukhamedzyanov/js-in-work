@@ -194,22 +194,12 @@ window.addEventListener(('DOMContentLoaded'), () => {
         }
     }
 
-    const getResurse = async (url) => {
-        const result = await fetch(url)
-
-        if (!result.ok) {
-            throw new Error(`Could not fetch ${url}, status: ${result.status}`)
-        }
-
-        return result.json();
-    }
-
-    getResurse('http://localhost:3000/menu')
+    axios.get('http://localhost:3000/menu')
         .then(data => {
-            data.forEach(({ img, altimg, title, descr, price }) => {
+            data.data.forEach(({ img, altimg, title, descr, price }) => {
                 new MenuCards(img, altimg, title, descr, price, '.menu__field .container').rander();
-            });
-        });
+            })
+        })
 
     //Forms
 
@@ -224,18 +214,6 @@ window.addEventListener(('DOMContentLoaded'), () => {
     forms.forEach(item => {
         bindPostData(item);
     });
-
-    const postData = async (url, data) => {
-        const res = await fetch(url, {
-            method: 'POST',
-            headers: {
-                'Content-type': 'application/json'
-            },
-            body: data
-        })
-
-        return await res.json()
-    }
 
     function bindPostData(form) {
         form.addEventListener('submit', (e) => {
@@ -253,7 +231,7 @@ window.addEventListener(('DOMContentLoaded'), () => {
 
             const json = JSON.stringify(Object.fromEntries(formData.entries()));
 
-            postData('http://localhost:3000/requests', json)
+            axios.post('http://localhost:3000/requests', json)
                 .then(data => {
                     console.log(data);
                     showThanksModal(massage.success);
