@@ -282,7 +282,8 @@ window.addEventListener(('DOMContentLoaded'), () => {
         leftArrow = document.querySelector('.offer__slider-prev'),
         sliderWraper = document.querySelector('.offer__slider-wrapper'),
         sliderField = document.querySelector('.offer__slider-inner'),
-        width = window.getComputedStyle(sliderWraper).width;
+        width = window.getComputedStyle(sliderWraper).width,
+        sliderAll = document.querySelector('.offer__slider');
 
     let slideIndex = 1;
     let offset = 0;
@@ -329,6 +330,7 @@ window.addEventListener(('DOMContentLoaded'), () => {
         }
 
         changeIndex()
+        changePoint()
     })
 
     leftArrow.addEventListener('click', () => {
@@ -346,6 +348,52 @@ window.addEventListener(('DOMContentLoaded'), () => {
         }
 
         changeIndex()
+        changePoint()
     })
 
-});
+    // Навигация по слайдерам
+    sliderAll.style.position = 'relative'
+
+    const wraperDot = document.createElement('div');
+    wraperDot.classList.add('carousel-indicators');
+    sliderAll.append(wraperDot);
+
+
+
+    // Точки навигации
+    for (let i = 0; i < imgSlider.length; i++) {
+        const dot = document.createElement('div');
+        dot.classList.add('dot');
+        dot.setAttribute('data-slide-to', (i + 1))
+
+        wraperDot.append(dot)
+    }
+
+    const point = document.querySelectorAll('.dot')
+    console.log(point);
+
+    let idPoint = point[0];
+
+    idPoint.style.opacity = '1'
+
+    point.forEach(item => {
+        item.addEventListener('click', () => {
+            slideIndex = +(item.dataset.slideTo)
+            offset = width.slice(0, (width.length - 2)) * (slideIndex - 1)
+            sliderField.style.transform = `translateX(-${offset}px)`;
+            changeIndex()    
+            changePoint()       
+        })
+    })
+
+    function changePoint() {
+        idPoint.style.opacity = '.5'
+        const p = point.filter(data => data.dataset = slideIndex)[0]
+        console.log(p);
+        p.style.opacity = 1;
+        idPoint = p;
+    }
+
+})
+
+
