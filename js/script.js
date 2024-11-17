@@ -124,6 +124,7 @@ window.addEventListener(('DOMContentLoaded'), () => {
     function clouseModal() {
         modalWindow.style.display = 'none';
         document.body.style.overflow = '';
+        clearTimeout(openModalThroughTime);
     }
 
     modalWindow.addEventListener('click', (e) => {
@@ -276,8 +277,16 @@ window.addEventListener(('DOMContentLoaded'), () => {
 
     const imgSlider = document.querySelectorAll('.offer__slide'),
         idSlider = document.querySelector('#current'),
+        totalSlider = document.querySelector('#total'),
         rigthArrow = document.querySelector('.offer__slider-next'),
         leftArrow = document.querySelector('.offer__slider-prev');
+
+    totalSlider.innerHTML = ''
+    if (imgSlider.length < 10) {
+        totalSlider.innerHTML = `0${imgSlider.length}`
+    } else {
+        totalSlider.innerHTML = `${imgSlider.length}`
+    }
 
     // Счётчик слайда
 
@@ -291,7 +300,12 @@ window.addEventListener(('DOMContentLoaded'), () => {
         });
 
         idSlider.innerHTML = ''
-        idSlider.innerHTML = `0${t + 1}`
+        if (imgSlider.length < 10) {
+            idSlider.innerHTML = `0${t + 1}`
+        } else {
+            idSlider.innerHTML = `${t + 1}`
+        }
+
     }
 
     current()
