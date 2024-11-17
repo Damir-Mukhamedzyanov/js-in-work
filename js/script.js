@@ -279,57 +279,73 @@ window.addEventListener(('DOMContentLoaded'), () => {
         idSlider = document.querySelector('#current'),
         totalSlider = document.querySelector('#total'),
         rigthArrow = document.querySelector('.offer__slider-next'),
-        leftArrow = document.querySelector('.offer__slider-prev');
+        leftArrow = document.querySelector('.offer__slider-prev'),
+        sliderWraper = document.querySelector('.offer__slider-wrapper'),
+        sliderField = document.querySelector('.offer__slider-inner'),
+        width = window.getComputedStyle(sliderWraper).width;
 
-    totalSlider.innerHTML = ''
+    let slideIndex = 1;
+    let offset = 0;
+
     if (imgSlider.length < 10) {
-        totalSlider.innerHTML = `0${imgSlider.length}`
+        totalSlider.textContent = `0${imgSlider.length}`;
+        idSlider.textContent = `0${slideIndex}`;
     } else {
-        totalSlider.innerHTML = `${imgSlider.length}`
+        totalSlider.textContent = imgSlider.length;
+        idSlider.textContent = slideIndex
     }
 
-    // Счётчик слайда
-
-    let t = 0;
-
-    function current() {
-        imgSlider.forEach((item, i) => {
-            if (!item.classList.contains('hide')) {
-                t = i
-            }
-        });
-
-        idSlider.innerHTML = ''
+    function changeIndex() {
         if (imgSlider.length < 10) {
-            idSlider.innerHTML = `0${t + 1}`
+            idSlider.textContent = `0${slideIndex}`;
         } else {
-            idSlider.innerHTML = `${t + 1}`
-        }
+            idSlider.textContent = slideIndex;
 
+        }
     }
 
-    current()
+    sliderField.style.width = 100 * imgSlider.length + '%';
+    sliderField.style.display = 'flex';
+    sliderField.style.transition = '0.5s all';
 
-    // Смена слайдов
+    sliderWraper.style.overflow = 'hidden'
+
+    imgSlider.forEach(item => {
+        item.style.width = width;
+    })
 
     rigthArrow.addEventListener('click', () => {
-        imgSlider[t].classList.add('hide')
-        if (t == (imgSlider.length - 1)) {
-            imgSlider[0].classList.remove('hide')
+        if (offset == +width.slice(0, width.length - 2) * (imgSlider.length - 1)) {
+            offset = 0;
         } else {
-            imgSlider[t + 1].classList.remove('hide')
+            offset += +width.slice(0, width.length - 2);
         }
-        current()
+        sliderField.style.transform = `translateX(-${offset}px)`;
+
+        if (slideIndex == imgSlider.length) {
+            slideIndex = 1;
+        } else {
+            slideIndex++;
+        }
+
+        changeIndex()
     })
 
     leftArrow.addEventListener('click', () => {
-        imgSlider[t].classList.add('hide')
-        if (t == 0) {
-            imgSlider[imgSlider.length - 1].classList.remove('hide')
+        if (offset == 0) {
+            offset = +width.slice(0, width.length - 2) * (imgSlider.length - 1);
         } else {
-            imgSlider[t - 1].classList.remove('hide')
+            offset -= +width.slice(0, width.length - 2);
         }
-        current()
+        sliderField.style.transform = `translateX(-${offset}px)`;
+
+        if (slideIndex == 1) {
+            slideIndex = imgSlider.length;
+        } else {
+            slideIndex--;
+        }
+
+        changeIndex()
     })
 
 });
