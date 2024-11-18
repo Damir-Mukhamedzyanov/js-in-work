@@ -330,7 +330,7 @@ window.addEventListener(('DOMContentLoaded'), () => {
         }
 
         changeIndex()
-        changePoint()
+        changeDot()
     })
 
     leftArrow.addEventListener('click', () => {
@@ -348,13 +348,15 @@ window.addEventListener(('DOMContentLoaded'), () => {
         }
 
         changeIndex()
-        changePoint()
+        changeDot()
     })
+
+    let dots = [];
 
     // Навигация по слайдерам
     sliderAll.style.position = 'relative'
 
-    const wraperDot = document.createElement('div');
+    const wraperDot = document.createElement('ol');
     wraperDot.classList.add('carousel-indicators');
     sliderAll.append(wraperDot);
 
@@ -362,38 +364,33 @@ window.addEventListener(('DOMContentLoaded'), () => {
 
     // Точки навигации
     for (let i = 0; i < imgSlider.length; i++) {
-        const dot = document.createElement('div');
+        const dot = document.createElement('li');
         dot.classList.add('dot');
         dot.setAttribute('data-slide-to', (i + 1))
 
+        if (i == 0) {
+            dot.style.opacity = 1;
+        }
         wraperDot.append(dot)
+        dots.push(dot)
     }
 
-    const point = document.querySelectorAll('.dot')
-    console.log(point);
+    function changeDot() {
+        dots.forEach(dot => dot.style.opacity = '0.5')
+        dots[slideIndex - 1].style.opacity = 1;
+    }
 
-    let idPoint = point[0];
-
-    idPoint.style.opacity = '1'
-
-    point.forEach(item => {
-        item.addEventListener('click', () => {
-            slideIndex = +(item.dataset.slideTo)
-            offset = width.slice(0, (width.length - 2)) * (slideIndex - 1)
+    // Интерактивность точек
+    dots.forEach(dot => {
+        dot.addEventListener('click', () => {
+            let i = dots.indexOf(dot);
+            slideIndex = (i + 1);
+            offset = +width.slice(0, width.length - 2) * i;
             sliderField.style.transform = `translateX(-${offset}px)`;
-            changeIndex()    
-            changePoint()       
+            changeIndex()
+            changeDot()
         })
     })
-
-    function changePoint() {
-        idPoint.style.opacity = '.5'
-        const p = point.filter(data => data.dataset = slideIndex)[0]
-        console.log(p);
-        p.style.opacity = 1;
-        idPoint = p;
-    }
-
 })
 
 
