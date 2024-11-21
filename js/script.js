@@ -314,12 +314,13 @@ window.addEventListener(('DOMContentLoaded'), () => {
     imgSlider.forEach(item => {
         item.style.width = width;
     })
+    let width1 = width.match(/\d/g).reduce((sum, value) => sum + value);
 
     rigthArrow.addEventListener('click', () => {
-        if (offset == +width.slice(0, width.length - 2) * (imgSlider.length - 1)) {
+        if (offset == +width1 * (imgSlider.length - 1)) {
             offset = 0;
         } else {
-            offset += +width.slice(0, width.length - 2);
+            offset += +width1;
         }
         sliderField.style.transform = `translateX(-${offset}px)`;
 
@@ -335,9 +336,9 @@ window.addEventListener(('DOMContentLoaded'), () => {
 
     leftArrow.addEventListener('click', () => {
         if (offset == 0) {
-            offset = +width.slice(0, width.length - 2) * (imgSlider.length - 1);
+            offset = +width1 * (imgSlider.length - 1);
         } else {
-            offset -= +width.slice(0, width.length - 2);
+            offset -= +width1;
         }
         sliderField.style.transform = `translateX(-${offset}px)`;
 
@@ -385,7 +386,7 @@ window.addEventListener(('DOMContentLoaded'), () => {
         dot.addEventListener('click', () => {
             let i = dots.indexOf(dot);
             slideIndex = (i + 1);
-            offset = +width.slice(0, width.length - 2) * i;
+            offset = +width1 * i;
             sliderField.style.transform = `translateX(-${offset}px)`;
             changeIndex()
             changeDot()
